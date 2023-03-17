@@ -13,7 +13,7 @@ const createChart = async () => {
   const ctx = document.getElementById("chart");
   const { data } = await getData();
   const chart = new Chart(ctx, {
-    type: "bar",
+    type: "doughnut",
     data: {
       labels: data.map((res) => res.queue),
       datasets: [
@@ -40,22 +40,18 @@ const createChart = async () => {
 
   const updateChart = async () => {
     const { data } = await getData();
-    let soma = 0
-    let totalcall = data.map((data)=>{
-      console.log(parseInt(data.calls))
-      soma += parseInt(data.calls)
-    })
-    console.log(soma)
-    const aban = data.map(function (data) {
-      return `<p class="content">${data.abandoned}</p>`;
-    });
+    const totalCalls = data.reduce((acc, curr) => acc + parseInt(curr.calls), 0);
+    const totalAban = data.reduce((acc, curr) => acc + parseInt(curr.abandoned), 0);
+    const totalComplete = data.reduce((acc, curr) => acc + parseInt(curr.completed), 0);
 
-    document.querySelector(".aban p").innerHTML = aban.join("");
-    const call = data.map(function (data) {
-      return `<p class="content">${totalcall}</p>`;
-    });
+    const aban = `<p class="content" style="font-size: 30px">${totalAban}</p>`;
+    document.querySelector(".aban p").innerHTML = aban;
+    
+    const call = `<p class="content" style="font-size: 30px">${totalCalls}</p>`;
+    document.querySelector(".call p").innerHTML = call;
 
-    document.querySelector(".call p").innerHTML = call.join("");
+    const complete = `<p class="content" style="font-size: 30px">${totalComplete}</p>`;
+    document.querySelector(".complete p").innerHTML = complete;
 
     const table = data.map(function (data) {
       return `<tr>

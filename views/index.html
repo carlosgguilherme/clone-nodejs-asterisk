@@ -22,7 +22,7 @@
       margin: 0 auto;
     }
     #chart {
-      width: 600px !important;
+      height: 400px !important;
       margin: 0 auto;
     }
     .mainCard {
@@ -41,6 +41,7 @@
       height: 150px;
       margin: auto;
       display: flex;
+      
     }
     #painelContent {
       height: 130px;
@@ -61,13 +62,17 @@
   <body>
     <div class="main">
       <div class="painel">
-        <div id="painelContent" class="aban">
-          <p></p>
+        <div id="painelContent" class="aban" style="background-color: red;">
+          <p>x</p>
           <p>Chamadas abandonadas</p>
         </div>
-        <div id="painelContent" class="call">
-          <p></p>
-          <p>Chamadas em andamento</p>
+        <div id="painelContent" class="call" style="background-color: orange;">
+          <p>x</p>
+          <p>Chamadas em espera</p>
+        </div>
+        <div id="painelContent" class="complete" style="background-color: green;">
+          <p>x</p>
+          <p>Chamadas completadas</p>
         </div>
       </div>
       <div class="mainCard">

@@ -20,13 +20,15 @@ let status = [];
 
 app.get("/api/asterisk", async function (req, res) {
   function managerevent(evt) {
+    console.log(evt)
     if (evt.event === "QueueStatusComplete") {
       ami.removeListener("managerevent", managerevent);
-    } //else if (evt.event === "QueueMember" || evt.event === "QueueParams") 
+    }//else if (evt.event === "QueueMember" || evt.event === "QueueParams") {
       else if (evt.event === "QueueParams") {
       status.push(evt);
     }
   }
+  
 
   await ami.on("managerevent", managerevent);
   ami.action({ action: "QueueStatus" });
