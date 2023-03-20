@@ -14,7 +14,7 @@ ami.connect();
 app.use(cors());
 app.use(express.json());
 
-app.listen(8001, () => console.log("Conectando na porta 80012"));
+app.listen(8001, () => console.log("Conectando na porta 8001"));
 
 let status = [];
 
@@ -23,8 +23,8 @@ app.get("/api/asterisk", async function (req, res) {
     console.log(evt)
     if (evt.event === "QueueStatusComplete") {
       ami.removeListener("managerevent", managerevent);
-    }//else if (evt.event === "QueueMember" || evt.event === "QueueParams") {
-      else if (evt.event === "QueueParams") {
+    } else if (evt.event === "QueueEntry" || evt.event === "QueueParams") {
+      //else if (evt.event === "QueueParams") {
       status.push(evt);
     }
   }

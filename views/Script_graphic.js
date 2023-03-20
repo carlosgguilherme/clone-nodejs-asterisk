@@ -39,14 +39,29 @@ const createChart = async () => {
   });
 
   const updateChart = async () => {
+    const rj = document.getElementById('BR-RJ')
+    const sp = document.getElementById('BR-SP')
+   
+   
+
+
     const { data } = await getData();
-    const totalCalls = data.reduce((acc, curr) => acc + parseInt(curr.calls), 0);
-    const totalAban = data.reduce((acc, curr) => acc + parseInt(curr.abandoned), 0);
-    const totalComplete = data.reduce((acc, curr) => acc + parseInt(curr.completed), 0);
+    const totalCalls = data.reduce(
+      (acc, curr) => acc + parseInt(curr.calls),
+      0
+    );
+    const totalAban = data.reduce(
+      (acc, curr) => acc + parseInt(curr.abandoned),
+      0
+    );
+    const totalComplete = data.reduce(
+      (acc, curr) => acc + parseInt(curr.completed),
+      0
+    );
 
     const aban = `<p class="content" style="font-size: 30px">${totalAban}</p>`;
     document.querySelector(".aban p").innerHTML = aban;
-    
+
     const call = `<p class="content" style="font-size: 30px">${totalCalls}</p>`;
     document.querySelector(".call p").innerHTML = call;
 
@@ -59,6 +74,8 @@ const createChart = async () => {
               <td>${data.abandoned}</td>
               <td>${data.calls}</td>
           </tr>`;
+
+          
     });
 
     document.querySelector("#tb tbody").innerHTML = table.join("");
@@ -68,8 +85,10 @@ const createChart = async () => {
     chart.data.datasets[1].data = data.map((res) => res.calls);
     chart.update();
   };
-
+  const id = data.calleridnum === "41000"
+  console.log(id)
   setInterval(updateChart, 2000);
 };
 
 await createChart();
+
