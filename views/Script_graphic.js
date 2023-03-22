@@ -6,89 +6,51 @@ const getData = async () => {
     .get("http://localhost:8001/api/asterisk")
     .then((res) => res);
 
+  // const [QueueParams42, QueueParams41, QueueEntry] = retrievedData.data;
+
   return retrievedData;
 };
 
-const createChart = async () => {
-  const ctx = document.getElementById("chart");
-  const { data } = await getData();
-  const chart = new Chart(ctx, {
-    type: "doughnut",
-    data: {
-      labels: data.map((res) => res.queue),
-      datasets: [
-        {
-          label: "Abandonadas",
-          data: data.map((res) => res.abandoned),
-          borderWidth: 1,
-        },
-        {
-          label: "Chamadas",
-          data: data.map((res) => res.calls),
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  });
+const data = await getData();
+const helo = Object.values(data.data[0]);
+const gui = Object.keys(data.data[0]);
 
-  const updateChart = async () => {
-    const rj = document.getElementById('BR-RJ')
-    const sp = document.getElementById('BR-SP')
-   
-   
+const V = [...gui, ...helo];
+console.log(V);
 
+console.log(V);
+V.forEach(function (item, index) {
+  console.log("ITEM: " + item," ITEM2: " + item);
+});
 
-    const { data } = await getData();
-    const totalCalls = data.reduce(
-      (acc, curr) => acc + parseInt(curr.calls),
-      0
-    );
-    const totalAban = data.reduce(
-      (acc, curr) => acc + parseInt(curr.abandoned),
-      0
-    );
-    const totalComplete = data.reduce(
-      (acc, curr) => acc + parseInt(curr.completed),
-      0
-    );
+// const updateChart = async () => {
+//   const data = await getData();
 
-    const aban = `<p class="content" style="font-size: 30px">${totalAban}</p>`;
-    document.querySelector(".aban p").innerHTML = aban;
+//   const valueQueue42 = data
+//     .filter((obj) => obj.queue === "42")
+//     .map((obj) => [Number(obj.id), obj.calls]);
+//   console.log(valueQueue42);
 
-    const call = `<p class="content" style="font-size: 30px">${totalCalls}</p>`;
-    document.querySelector(".call p").innerHTML = call;
+//   const totalCalls = data
+//     .filter((obj) => obj.queue === "42" || obj.queue === "41")
+//     .reduce((acc, curr) => acc + parseInt(curr.calls), 0);
+//   const totalAban = data
+//     .filter((obj) => obj.queue === "42")
+//     .reduce((acc, curr) => acc + parseInt(curr.abandoned), 0);
+//   const totalComplete = data
+//     .filter((obj) => obj.queue === "42")
+//     .reduce((acc, curr) => acc + parseInt(curr.completed), 0);
 
-    const complete = `<p class="content" style="font-size: 30px">${totalComplete}</p>`;
-    document.querySelector(".complete p").innerHTML = complete;
+//   const aban = `<p class="content" style="font-size: 30px">${totalAban}</p>`;
+//   document.querySelector(".aban p").innerHTML = aban;
 
-    const table = data.map(function (data) {
-      return `<tr>
-              <td>${data.queue}</td>
-              <td>${data.abandoned}</td>
-              <td>${data.calls}</td>
-          </tr>`;
+//   const call = `<p class="content" style="font-size: 30px">${totalCalls}</p>`;
+//   document.querySelector(".call p").innerHTML = call;
 
-          
-    });
+//   const complete = `<p class="content" style="font-size: 30px">${totalComplete}</p>`;
+//   document.querySelector(".complete p").innerHTML = complete;
 
-    document.querySelector("#tb tbody").innerHTML = table.join("");
+//   setInterval(updateChart, 2000);
+// };
 
-    chart.data.labels = data.map((res) => res.queue);
-    chart.data.datasets[0].data = data.map((res) => res.abandoned);
-    chart.data.datasets[1].data = data.map((res) => res.calls);
-    chart.update();
-  };
-  const id = data.calleridnum === "41000"
-  console.log(id)
-  setInterval(updateChart, 2000);
-};
-
-await createChart();
-
+// await updateChart();
