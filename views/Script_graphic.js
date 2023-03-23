@@ -11,7 +11,10 @@ const getData = async () => {
 
   retrievedData.data.forEach((obj) => {
     if (obj.hasOwnProperty("queue")) {
-      queueParams[obj.queue] = obj;
+      if (!queueParams[obj.queue]) {
+        queueParams[obj.queue] = [];
+      }
+      queueParams[obj.queue].push(obj);
     } else {
       queueEntries.push(obj);
     }
@@ -19,14 +22,26 @@ const getData = async () => {
 
   return { queueParams, queueEntries };
 };
+const updateChart = async () => {
+  const data = await getData();
 
-const data = await getData();
+  const queueParams41 = data.queueParams["41"];
+  console.log(queueParams41)
 
-const queueParams42 = data.queueParams["42"];
-
-const queueEntries = data.queueEntries;
-
-console.log(queueParams42);
+  const RJ = data.queueParams["41"][1].calleridnum;
+  if (RJ === "41000") {
+    console.log("if1")
+    const state = document.getElementById("BR-AC");
+    state.style.fill = "red";
+  }  
+  if(RJ === ""){
+    console.log("if2")
+    console.log("Não teve alteração!");
+    state.style.fill = "";
+  }
+};
+setInterval(updateChart, 1000);
+await updateChart();
 
 // const updateChart = async () => {
 //   const data = await getData();
