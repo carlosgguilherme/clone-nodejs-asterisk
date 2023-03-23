@@ -6,22 +6,27 @@ const getData = async () => {
     .get("http://localhost:8001/api/asterisk")
     .then((res) => res);
 
-  // const [QueueParams42, QueueParams41, QueueEntry] = retrievedData.data;
+  const queueParams = {};
+  const queueEntries = [];
 
-  return retrievedData;
+  retrievedData.data.forEach((obj) => {
+    if (obj.hasOwnProperty("queue")) {
+      queueParams[obj.queue] = obj;
+    } else {
+      queueEntries.push(obj);
+    }
+  });
+
+  return { queueParams, queueEntries };
 };
 
 const data = await getData();
-const helo = Object.values(data.data[0]);
-const gui = Object.keys(data.data[0]);
 
-const V = [...gui, ...helo];
-console.log(V);
+const queueParams42 = data.queueParams["42"];
 
-console.log(V);
-V.forEach(function (item, index) {
-  console.log("ITEM: " + item," ITEM2: " + item);
-});
+const queueEntries = data.queueEntries;
+
+console.log(queueParams42);
 
 // const updateChart = async () => {
 //   const data = await getData();
