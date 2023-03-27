@@ -6,7 +6,7 @@ const getData = async () => {
     .get("http://localhost:8001/api/asterisk")
     .then((res) => res);
 
-  const queueParams = {};
+  const queueParams = [];
   const queueEntries = [];
 
   retrievedData.data.forEach((obj) => {
@@ -22,30 +22,27 @@ const getData = async () => {
 
   return { queueParams, queueEntries };
 };
-const updateChart = async () => { 
+const updateChart = async () => {
   const data = await getData();
 
   const queueKeys = Object.keys(data.queueParams);
-
+  console.log(data)
   const totals = {
     calls: 0,
     abandoned: 0,
     completed: 0,
   };
-
+ 
   queueKeys.forEach((key) => {
     const params = data.queueParams[key];
- 
-    totals.calls += params.reduce((acc, curr) => acc + parseInt(curr.calls), 0);
-
-    totals.abandoned += params.reduce(
-      (acc, curr) => acc + parseInt(curr.abandoned),
-      0
-    );
-    totals.completed += params.reduce(
-      (acc, curr) => acc + parseInt(curr.completed),
-      0
-    );
+    const fact = params[0];
+    const n = 1
+    const geo =   params[n]
+    const BR_RJ = document.getElementById("BR-RJ");
+    console.log(geo)
+    totals.calls += fact.calls++;
+    totals.abandoned += fact.abandoned++;
+    totals.completed += fact.completed++;
 
     const aban = `<p class="content" style="font-size: 30px">${totals.abandoned}</p>`;
     document.querySelector(".aban p").innerHTML = aban;
