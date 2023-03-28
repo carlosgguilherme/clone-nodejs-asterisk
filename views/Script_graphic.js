@@ -32,10 +32,39 @@ const updateChart = async () => {
     abandoned: 0,
     completed: 0,
   };
+  const dddToState = {
+    68: "AC",
+    82: "AL",
+    92: "AM",
+    71: "BA",
+    88: "CE",
+    61: "DF",
+    27: "ES",
+    62: "GO",
+    98: "MA",
+    65: "MT",
+    67: "MS",
+    31: "MG",
+    91: "PA",
+    83: "PB",
+    41: "PR",
+    81: "PE",
+    22: "PI",
+    21: "RJ",
+    84: "RN",
+    51: "RS",
+    69: "RO",
+    95: "RR",
+    47: "SC",
+    79: "SE",
+    11: "SP",
+    63: "TO",
+  };
 
-  const BR_PR = document.getElementById("BR-PR");
-
-  BR_PR.setAttribute("fill", "black");
+  const defaultmap = document.querySelectorAll("path");
+  defaultmap.forEach((defaultmap) => {
+    defaultmap.setAttribute("fill", "black");
+  });
 
   queueKeys.forEach((key) => {
     const params = data.queueParams[key];
@@ -45,15 +74,17 @@ const updateChart = async () => {
     totals.calls += fact.calls++;
     totals.abandoned += fact.abandoned++;
     totals.completed += fact.completed++;
+
     for (let i = 0; i < params.length - 1; i++) {
       const geo = params[G];
-      console.log(geo.calleridnum.substr(0, 2));
-
       G++;
-      if (geo.calleridnum.substr(0, 2) === "41") {
-        BR_PR.setAttribute("fill", "red");
-      } else {
-        BR_PR.setAttribute(dado);
+
+      const ddd = geo.calleridnum.substr(0, 2);
+      const state = dddToState[ddd];
+
+      if (state) {
+        const element = document.getElementById(`BR-${state}`);
+        element.setAttribute("fill", "rgb(153, 255, 0)");
       }
     }
 
@@ -67,5 +98,6 @@ const updateChart = async () => {
     document.querySelector(".complete p").innerHTML = complete;
   });
 };
+
 setInterval(updateChart, 1000);
 await updateChart();
