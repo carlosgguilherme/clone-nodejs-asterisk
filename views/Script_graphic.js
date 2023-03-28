@@ -26,23 +26,36 @@ const updateChart = async () => {
   const data = await getData();
 
   const queueKeys = Object.keys(data.queueParams);
-  console.log(data)
+
   const totals = {
     calls: 0,
     abandoned: 0,
     completed: 0,
   };
- 
+
+  const BR_PR = document.getElementById("BR-PR");
+
+  BR_PR.setAttribute("fill", "black");
+
   queueKeys.forEach((key) => {
     const params = data.queueParams[key];
     const fact = params[0];
-    const n = 1
-    const geo =   params[n]
-    const BR_RJ = document.getElementById("BR-RJ");
-    console.log(geo)
+    let G = 1;
+
     totals.calls += fact.calls++;
     totals.abandoned += fact.abandoned++;
     totals.completed += fact.completed++;
+    for (let i = 0; i < params.length - 1; i++) {
+      const geo = params[G];
+      console.log(geo.calleridnum.substr(0, 2));
+
+      G++;
+      if (geo.calleridnum.substr(0, 2) === "41") {
+        BR_PR.setAttribute("fill", "red");
+      } else {
+        BR_PR.setAttribute(dado);
+      }
+    }
 
     const aban = `<p class="content" style="font-size: 30px">${totals.abandoned}</p>`;
     document.querySelector(".aban p").innerHTML = aban;
