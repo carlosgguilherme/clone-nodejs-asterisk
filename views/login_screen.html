@@ -7,30 +7,76 @@
     <title>Login</title>
     <style>
       body {
-        background-color: rgba(167, 118, 213, 0.823);
-        font: normal 15pt Arial;
-        color: white;
-      }
-      header {
-        text-align: center;
+        margin: 0;
+        padding: 0;
+        font-family: "poppins", sans-serif;
       }
       section {
-        background-color: white;
-        color: black;
-        border-radius: 15px;
-        padding: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        width: 100%;
+
+        background-color: rgba(167, 118, 213, 0.823);
+      }
+      .form {
+        position: relative;
         width: 500px;
-        margin: 0 auto;
+        height: 400px;
+        background-color: transparent;
+        border: solid #fff 2px;
+        border-radius: 20px;
+        backdrop-filter: blur(20px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
         box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.286);
+        align-content: center;
+        text-align: center;
+      }
+
+      .image img {
+        width: 15em;
+      }
+      .input {
+        position: relative;
+        margin: 30px 0;
+        width: 310px;
+        border-bottom: 2px solid #fff;
+      }
+      .input label {
+        position: absolute;
+        top: 50%;
+        left: 5px;
+        transform: translateY(-50%);
+        color: #fff;
+        font-size: 1em;
+        pointer-events: none;
+        transition: 0.4s;
+      }
+      input:focus ~ label,
+      input:valid ~ label {
+        top: -5px;
+      }
+      .input input {
+        width: 100%;
+        height: 50px;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 1em;
+        padding: 0 35px 0 5px;
+        color: #fff;
       }
       button {
-        background-color: transparent;
-        margin: 10px 10px 10px 10px;
-        padding: 10px 60px;
+        background-color: #fff;
+        width: 100%;
+        height: 40px;
         border: hidden;
         border-radius: 30px;
-        font-size: 15pt;
-        font-weight: bold;
+        font-weight: 650;
+        font-size: 1em;
         transition: 400ms;
       }
       button:hover {
@@ -39,29 +85,31 @@
         background-color: rgb(152, 93, 208);
         color: white;
       }
-      section div {
-        text-align: center;
-        padding: 10px;
-      }
     </style>
   </head>
   <body>
+    <header></header>
     <section>
-      <div>
-        <p>
-          <input type="text" placeholder="login" />
-        </p>
-        <p>
-          <input type="text" placeholder="password" />
-        </p>
-        <p>
-          <button>Logar</button>
-        </p>
-        <p>Ou</p>
-        <p>
-          <button>Cadastrar</button>
-        </p>
+      <div class="box">
+        <div class="form">
+          <form action="">
+            <div class="image">
+              <img src="../public/logo-azul-com-texto.png" alt="BRDSOFT" />
+            </div>
+
+            <div class="input">
+              <input type="email" required />
+              <label for="">E-mail</label>
+            </div>
+            <div class="input">
+              <input type="password" required />
+              <label for="">Senha</label>
+            </div>
+            <button>Log in</button>
+          </form>
+        </div>
       </div>
     </section>
+    <footer></footer>
   </body>
 </html>
