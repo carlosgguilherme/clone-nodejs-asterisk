@@ -1,5 +1,5 @@
 import "../node_modules/axios/dist/axios.min.js";
-import "../node_modules/chart.js/dist/chart.umd.js";
+
 
 const getData = async () => {
   const retrievedData = await axios
@@ -101,3 +101,4 @@ const updateChart = async () => {
 
 setInterval(updateChart, 1000);
 await updateChart();
+

@@ -4,8 +4,18 @@ const asteriskManager = require("asterisk-manager");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const path = require("path");
+const mysql = require("mysql2");
+const connection = mysql.createConnection({
+  host: "localhost",
+  user: "carlos",
+  password: "C@rlos1234",
+  database: "NODE_MAP_USERS",
+});
+connection.connect();
 
-app.use(express.static("views/log"));
+app.use(express.static(path.join(__dirname, "views")));
+app.use(express.static("/public"));
+
 app.set("view engine", "html");
 let ami = asteriskManager(
   "5038",
@@ -38,55 +48,13 @@ app.get("/api/asterisk", async function (req, res) {
   status = [];
 });
 
-const credentials = {
-  username: "usuario",
-  password: "senha",
-};
-
-// Rota para autenticação
-app.post("/login", (req, res) => {
-  // Verifica se as credenciais estão corretas
-  if (
-    req.body.username === credentials.username &&
-    req.body.password === credentials.password
-  ) {
-    // Cria um token JWT
-    const token = jwt.sign(
-      { username: credentials.username },
-      "MinhaStringSecreta123"
-    );
-
-    // Envia o token como resposta
-    res.json({ token: token });
-  } else {
-    // Retorna um erro de autenticação
-    res.status(401).json({ error: "Credenciais inválidas" });
-  }
-});
-
-// Rota protegida que só pode ser acessada com um token válido
-app.get("/index", authenticateToken, (req, res) => {
-  res.sendFile(path.join(__dirname, "views/index.html"));
-});
-
-// Middleware para autenticar o token
-function authenticateToken(req, res, next) {
-  // Verifica se o token foi enviado
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-
-  if (token == null) return res.sendStatus(401);
-
-  // Verifica se o token é válido
-  jwt.verify(token, "MinhaStringSecreta123", (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    app.get("/", (req, res) => {});
-
-    next();
+app.get("/api/users", async function (req, res) {
+  connection.query("SELECT * FROM Users", (err, rows, fields) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: "Erro ao consultar o banco de dados" });
+      return;
+    }
+    res.status(200).json(rows);
   });
-}
-
-app.get("/", (req, res) => {
-  res.render("log_in/login_screen.html");
 });
