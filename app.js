@@ -57,7 +57,7 @@ app.post("/auth", function (req, res) {
 
 app.get('/map', function(req, res){
   if(req.session.loggedin){
-    res.send('Bem vindo, ' + req.session.email + '!');
+    res.sendFile(path.join(__dirname, "/map.html"));
   }
   res.end();
 })
