@@ -106,17 +106,17 @@
     <section>
       <div class="box">
         <div class="form">
-          <form action="/login" method="post">
+          <form action="/auth" method="post">
             <div class="image">
               <img src="../public/logo-azul-com-texto.png" alt="BRDSOFT" />
             </div>
             <div class="input" id="email" name="email" >
-              <input type="text" id="emailValue" required />
-              <label for="">E-mail</label>
+              <input type="text" id="emailValue" name="email" required />
+              <label for="email">E-mail</label>
             </div>
             <div class="input" id="password" name="password" >
-              <input type="password" id="passwordValue" required />
-              <label for="">Senha</label>
+              <input type="password" id="passwordValue" name="password" required />
+              <label for="password">Senha</label>
             </div>
             <input class="button" type="submit" value="Log in">
             <div class="forgot">
@@ -127,6 +127,5 @@
       </div>
     </section>
     <footer></footer>
-    <script src="auth.js"></script>
   </body>
 </html>

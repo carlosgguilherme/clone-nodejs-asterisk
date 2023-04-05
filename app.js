@@ -1,8 +1,7 @@
 const express = require("express");
-const app = express();
 const asteriskManager = require("asterisk-manager");
 const cors = require("cors");
-const jwt = require("jsonwebtoken");
+const session = require("express-session");
 const path = require("path");
 const mysql = require("mysql2");
 const connection = mysql.createConnection({
@@ -11,12 +10,58 @@ const connection = mysql.createConnection({
   password: "C@rlos1234",
   database: "NODE_MAP_USERS",
 });
-connection.connect();
+const app = express();
+app.use(
+  session({
+    secret: "secret",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "static")));
 
-app.use(express.static(path.join(__dirname, "views")));
-app.use(express.static("/public"));
+app.get("/", function (req, res) {
+  res.sendFile(path.join(__dirname, "/index.html"));
+});
 
-app.set("view engine", "html");
+app.post("/auth", function (req, res) {
+  let email = req.body.email;
+  let password = req.body.password;
+
+  console.log(req.body)
+
+  if (email && password) {
+    connection.query(
+      "SELECT * FROM Users WHERE email = ? AND password = ?",
+      [email, password],
+      function (error, results, fields) {
+        if (error) throw error;
+        if (results.length > 0) {
+          req.session.loggedin = true;
+          req.session.email = email;
+
+          res.redirect("/map");
+        } else {
+          res.send("Email ou senha incorretos");
+        }
+        res.end();
+      }
+    );
+  } else {
+    res.send("Por favor bote o email e a senha");
+    res.end();
+  }
+});
+
+app.get('/map', function(req, res){
+  if(req.session.loggedin){
+    res.send('Bem vindo, ' + req.session.email + '!');
+  }
+  res.end();
+})
+
 let ami = asteriskManager(
   "5038",
   "pabx20.brdsoft.com.br",
@@ -48,13 +93,13 @@ app.get("/api/asterisk", async function (req, res) {
   status = [];
 });
 
-app.get("/api/users", async function (req, res) {
-  connection.query("SELECT * FROM Users", (err, rows, fields) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ error: "Erro ao consultar o banco de dados" });
-      return;
-    }
-    res.status(200).json(rows);
-  });
-});
+// app.get("/api/users", async function (req, res) {
+//   connection.query("SELECT * FROM Users", (err, rows, fields) => {
+//     if (err) {
+//       console.error(err);
+//       res.status(500).json({ error: "Erro ao consultar o banco de dados" });
+//       return;
+//     }
+//     res.status(200).json(rows);
+//   });
+// });
