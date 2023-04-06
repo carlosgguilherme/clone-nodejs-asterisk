@@ -55,11 +55,11 @@ app.post("/auth", function (req, res) {
   }
 });
 
-app.get('/map', function(req, res){
+app.get('/map', function(req, res){                           
   if(req.session.loggedin){
     res.sendFile(path.join(__dirname, "/map.html"));
   }
-  res.end();
+
 })
 
 let ami = asteriskManager(
@@ -93,13 +93,3 @@ app.get("/api/asterisk", async function (req, res) {
   status = [];
 });
 
-// app.get("/api/users", async function (req, res) {
-//   connection.query("SELECT * FROM Users", (err, rows, fields) => {
-//     if (err) {
-//       console.error(err);
-//       res.status(500).json({ error: "Erro ao consultar o banco de dados" });
-//       return;
-//     }
-//     res.status(200).json(rows);
-//   });
-// });
