@@ -63,7 +63,7 @@ const updateChart = async () => {
 
   const defaultmap = document.querySelectorAll("path");
   defaultmap.forEach((defaultmap) => {
-    defaultmap.setAttribute("fill", "black");
+    defaultmap.setAttribute("fill", "rgb(18,18,18)");
   });
 
   queueKeys.forEach((key) => {
