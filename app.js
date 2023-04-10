@@ -23,7 +23,7 @@
   app.use(express.static(path.join(__dirname, "static")));
   
   app.use("/static", function(req, res, next) {
-    res.setHeader("Content-Type", "application/javascript");
+    res.setHeader("Content-Type", "text/plain");
     next();
   });
   
