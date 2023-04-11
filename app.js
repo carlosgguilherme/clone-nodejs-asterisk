@@ -1,4 +1,4 @@
-  const express = require("express");
+const express = require("express");
   const asteriskManager = require("asterisk-manager");
   const cors = require("cors");
   const session = require("express-session");
@@ -63,9 +63,11 @@
 
   app.get('/map', function(req, res){                           
     if(req.session.loggedin){
-      res.sendFile(path.join(__dirname, "/map.html"));
+     // res.set('Content-Type', 'text/javascript'); 
+      res.sendFile(path.join(__dirname, "map.html")); 
     }
   })
+  
 
   let ami = asteriskManager(
     "5038",
@@ -97,4 +99,3 @@
     res.status(200).json(status);
     status = [];
   });
-
