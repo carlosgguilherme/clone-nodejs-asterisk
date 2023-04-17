@@ -1,4 +1,46 @@
 //import "/node_modules/axios/dist/axios.min.js";
+// Obtenha o valor do cookie 'token'
+function getCookie(name) {
+  const cookieArr = document.cookie.split(";").map(cookie => cookie.trim());
+  const cookie = cookieArr.find(cookie => cookie.startsWith(`${name}=`));
+  if (cookie) {
+    return cookie.split("=")[1];
+  }
+  return null;
+}
+
+// Exemplo de como obter o JWT do cookie 'token'
+const token = getCookie('token');
+
+// Faça uma requisição para o servidor enviando o JWT no cabeçalho 'Authorization'
+if (token) {
+  // Faça a requisição para o servidor incluindo o JWT no cabeçalho 'Authorization'
+  fetch('/api/recurso-protegido', {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(response => {
+    if (response.ok) {
+      // A resposta foi bem-sucedida, você pode processar os dados retornados
+      return response.json();
+    } else {
+      // A resposta foi com erro, você pode tratar o erro aqui
+      throw new Error("Erro na requisição");
+    }
+  })
+  .then(data => {
+    // Processar os dados retornados do servidor
+    console.log(data);
+  })
+  .catch(error => {
+    // Tratar o erro da requisição
+    console.error(error);
+  });
+} else {
+  // O token não foi encontrado, faça o tratamento adequado
+  console.log("Token não encontrado");
+}
 
 const getData = async () => {
   const retrievedData = await axios

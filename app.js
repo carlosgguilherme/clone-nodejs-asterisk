@@ -5,23 +5,24 @@ const session = require("express-session");
 const path = require("path");
 const mysql = require("mysql2");
 const jwt = require("jsonwebtoken");
+const loginMiddleware = require("./middleware/login");
+const cookieParser = require('cookie-parser');
+
+const secret = "aisoleh";
+
 const connection = mysql.createConnection({
   host: "localhost",
   user: "carlos",
   password: "C@rlos1234",
   database: "NODE_MAP_USERS",
 });
+
 const app = express();
-app.use(
-  session({
-    secret: "secret",
-    resave: true,
-    saveUninitialized: true,
-  })
-);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "static")));
+app.use(cookieParser());
 
 app.use("/static", function (req, res, next) {
   res.setHeader("Content-Type", "text/plain");
@@ -39,7 +40,6 @@ app.post("/auth", function (req, res) {
   console.log(req.body);
 
   if (email && password) {
-    const secret = "aisoleh";
     connection.query(
       "SELECT * FROM Users WHERE email = ? AND password = ?",
       [email, password],
@@ -47,37 +47,35 @@ app.post("/auth", function (req, res) {
         if (error) throw error;
         if (results.length > 0) {
           const token = jwt.sign({ email }, secret, { expiresIn: "1h" });
-          res.status(200).json({ token: token });
+          res.cookie('token', token);
+          res.status(200).json({ auth: true, token }); // Enviar o token como resposta
         } else {
-          res.send("Email ou senha incorretos");
+          res.status(401).json({ error: "Email ou senha incorretos" }); // Retornar erro de autenticação
         }
-        res.end();
       }
     );
   } else {
-    res.send("Por favor bote o email e a senha");
-    res.end();
+    res.status(400).json({ error: "Por favor, informe o email e a senha" }); // Retornar erro de requisição inválida
   }
 });
 
-function authtoken(req, res, next) {
-  const token = req.header("Authorization");
+app.post("/logout", function (req, res) {
+  res.json({ auth: false, token: null });
+});
 
-  if (!token) {
-    return res.status(401);
-  }
-  jwt.verify(token, secret, (err, user) => {
-    if (err) {
-      return res.status(403);
-    }
-    req.user = user;
+//Middleware de autenticação com JWT
+function VerifyJWT(req, res, next) {
+  const token = req.header("x-access-token"); // Utilize req.header() para acessar cabeçalhos
+  jwt.verify(token, secret, (err, decoded) => {
+    if (err) return res.status(401).end();
+    req.email = decoded.email;
     next();
   });
 }
 
-app.get("/map", authtoken, function (req, res) {
+
+app.get("/map",VerifyJWT, function (req, res) {
   if (req.session.loggedin) {
-    // res.set('Content-Type', 'text/javascript');
     res.sendFile(path.join(__dirname, "map.html"));
   }
 });
