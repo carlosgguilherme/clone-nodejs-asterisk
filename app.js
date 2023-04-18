@@ -32,7 +32,9 @@ app.use("/static", function (req, res, next) {
 app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname, "/index.html"));
 });
+// function redirect (req, res, next){
 
+// }
 app.post("/auth", function (req, res) {
   let email = req.body.email;
   let password = req.body.password;
@@ -57,6 +59,9 @@ app.post("/auth", function (req, res) {
   } else {
     res.status(400).json({ error: "Por favor, informe o email e a senha" }); // Retornar erro de requisição inválida
   }
+}, function(req, res) {
+  // Redirect to /map if authentication is successful
+  res.redirect("/map");
 });
 
 app.post("/logout", function (req, res) {
