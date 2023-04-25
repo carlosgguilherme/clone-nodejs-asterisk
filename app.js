@@ -5,8 +5,7 @@ const session = require("express-session");
 const path = require("path");
 const mysql = require("mysql2");
 const jwt = require("jsonwebtoken");
-const loginMiddleware = require("./middleware/login");
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 
 const secret = "aisoleh";
 
@@ -32,9 +31,7 @@ app.use("/static", function (req, res, next) {
 app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname, "/index.html"));
 });
-// function redirect (req, res, next){
 
-// }
 app.post("/auth", function (req, res) {
   let email = req.body.email;
   let password = req.body.password;
@@ -49,7 +46,7 @@ app.post("/auth", function (req, res) {
         if (error) throw error;
         if (results.length > 0) {
           const token = jwt.sign({ email }, secret, { expiresIn: "1h" });
-          res.cookie('token', token);
+          res.cookie("token", token);
           res.status(200).json({ auth: true, token }); // Enviar o token como resposta
         } else {
           res.status(401).json({ error: "Email ou senha incorretos" }); // Retornar erro de autenticação
@@ -59,30 +56,35 @@ app.post("/auth", function (req, res) {
   } else {
     res.status(400).json({ error: "Por favor, informe o email e a senha" }); // Retornar erro de requisição inválida
   }
-}, function(req, res) {
-  // Redirect to /map if authentication is successful
-  res.redirect("/map");
 });
 
 app.post("/logout", function (req, res) {
   res.json({ auth: false, token: null });
 });
 
-//Middleware de autenticação com JWT
-function VerifyJWT(req, res, next) {
-  const token = req.header("x-access-token"); // Utilize req.header() para acessar cabeçalhos
+// Middleware de autenticação com JWT
+
+function verifyJWT(req, res, next) {
+  const token = req.cookies.token; // Recupere o token do cookie, se estiver sendo enviado no cookie
+  // const token = req.header("x-access-token"); // Ou recupere o token do cabeçalho, se estiver sendo enviado no cabeçalho da requisição
+  if (!token) {
+    // Se o token não estiver presente, redirecione para a página de login
+    return res.redirect("/");
+  }
+
   jwt.verify(token, secret, (err, decoded) => {
-    if (err) return res.status(401).end();
+    if (err) {
+      // Se o token for inválido, redirecione para a página de login
+      return res.redirect("/");
+    }
     req.email = decoded.email;
     next();
   });
 }
 
-
-app.get("/map",VerifyJWT, function (req, res) {
-  if (req.session.loggedin) {
-    res.sendFile(path.join(__dirname, "map.html"));
-  }
+// Rota /map protegida com o middleware de autenticação
+app.get("/map", verifyJWT, function (req, res) {
+  res.sendFile(path.join(__dirname, "map.html"));
 });
 
 let ami = asteriskManager(

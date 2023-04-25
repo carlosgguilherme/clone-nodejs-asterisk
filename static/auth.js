@@ -1,5 +1,5 @@
- function getDataLogin(){
-    const login = {}
-    login.email = document.getElementById("emailValue")
-    login.password = document.getElementById("passwordValue")
+import Cookies from "js-cookie";
+
+function getAuthToken() {
+  return Cookies.get("token");
 }

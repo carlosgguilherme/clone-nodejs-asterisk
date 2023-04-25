@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./node_modules/js-cookie/dist/js.cookie.min.js"></script>
     <title>Login</title>
     <style>
       body {
@@ -126,7 +127,12 @@
               />
               <label for="password">Senha</label>
             </div>
-            <input class="button" type="submit" value="Log in" />
+            <input
+              class="button"
+              type="button"
+              value="Log in"
+              onclick="getDataLogin()"
+            />
             <div class="forgot">
               <p>Esqueceu a <a href="#">senha?</a></p>
             </div>
@@ -135,16 +141,35 @@
       </div>
     </section>
     <footer></footer>
+    <script type="module" src="auth.js"></script>
     <script>
-      // Após receber a resposta do servidor com o token JWT
-      if (response.status === 200) {
-        const token = response.data.token;
+      function getDataLogin() {
+        email = document.getElementById("emailValue").value;
+        password = document.getElementById("passwordValue").value;
 
-        // Armazene o token no armazenamento local do navegador
-        localStorage.setItem("token", token);
+        const login = {
+          email: email,
+          password: password,
+        };
+        fetch("/auth", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(login),
+        });
+        // Após receber o token do getDataLogin
+        getDataLogin()
+          .then((response) => {
+            const token = response.token;
+
+            // Redirecionar para a página map.html
+            window.location.href = "/map";
+          })
+          .catch((error) => {
+            // Tratar erros, se necessário
+          });
       }
-      // Redirecione o usuário para a rota /map
-      window.location.href = "/map";
     </script>
   </body>
 </html>

@@ -15,7 +15,7 @@ const token = getCookie('token');
 // Faça uma requisição para o servidor enviando o JWT no cabeçalho 'Authorization'
 if (token) {
   // Faça a requisição para o servidor incluindo o JWT no cabeçalho 'Authorization'
-  fetch('/api/recurso-protegido', {
+  fetch('/auth', {
     headers: {
       'Authorization': `Bearer ${token}`
     }
