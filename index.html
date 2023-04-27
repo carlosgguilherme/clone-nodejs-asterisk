@@ -151,23 +151,24 @@
           email: email,
           password: password,
         };
+
         fetch("/auth", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(login),
-        });
-        // Após receber o token do getDataLogin
-        getDataLogin()
+        })
           .then((response) => {
-            const token = response.token;
-
-            // Redirecionar para a página map.html
-            window.location.href = "/map";
+            if (response.status === 200) {
+              response.json().then((data) => {
+                localStorage.setItem("token", data.token); // Armazena o token no localStorage
+                window.location.href = "/map"; // Redireciona para a rota /map
+              });
+            }
           })
           .catch((error) => {
-            // Tratar erros, se necessário
+            console.error(error);
           });
       }
     </script>

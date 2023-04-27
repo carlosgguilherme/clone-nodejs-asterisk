@@ -1,3 +1,4 @@
+
 const express = require("express");
 const asteriskManager = require("asterisk-manager");
 const cors = require("cors");
@@ -65,17 +66,14 @@ app.post("/logout", function (req, res) {
 // Middleware de autenticação com JWT
 
 function verifyJWT(req, res, next) {
-  const token = req.cookies.token; // Recupere o token do cookie, se estiver sendo enviado no cookie
-  // const token = req.header("x-access-token"); // Ou recupere o token do cabeçalho, se estiver sendo enviado no cabeçalho da requisição
+  const token = req.cookies.token;
   if (!token) {
-    // Se o token não estiver presente, redirecione para a página de login
-    return res.redirect("/");
+    return res.status(401).json({ auth: false, message: "Token não informado." });
   }
 
   jwt.verify(token, secret, (err, decoded) => {
     if (err) {
-      // Se o token for inválido, redirecione para a página de login
-      return res.redirect("/");
+      return res.status(500).json({ auth: false, message: "Falha ao autenticar o token." });
     }
     req.email = decoded.email;
     next();
