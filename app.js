@@ -41,8 +41,8 @@ app.post("/auth", function (req, res) {
 
   if (email && password) {
     connection.query(
-      "SELECT * FROM Users WHERE email = ? AND password = ?",
-      [email, password],
+      "SELECT * FROM Users WHERE email = ? AND password = ? AND id = ?",
+      [email, password, userID],
       function (error, results, fields) {
         if (error) throw error;
         if (results.length > 0) {
