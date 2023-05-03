@@ -77,7 +77,7 @@ const updateChart = async () => {
     for (let i = 0; i < params.length - 1; i++) {
       const geo = params[G];
       G++;
-
+      console.log(geo.queue)
       const ddd = geo.calleridnum.substr(0, 2);
       const state = dddToState[ddd];
 

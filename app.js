@@ -41,11 +41,12 @@ app.post("/auth", function (req, res) {
 
   if (email && password) {
     connection.query(
-      "SELECT * FROM Users WHERE email = ? AND password = ? AND id = ?",
-      [email, password, userID],
+      "SELECT * FROM Users WHERE email = ? AND password = ?",
+      [email, password],
       function (error, results, fields) {
         if (error) throw error;
         if (results.length > 0) {
+          
           const token = jwt.sign({ email }, secret, { expiresIn: "1h" });
           res.cookie("token", token);
           res.status(200).json({ auth: true, token }); // Enviar o token como resposta
