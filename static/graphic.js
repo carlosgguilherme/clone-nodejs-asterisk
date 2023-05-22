@@ -70,7 +70,7 @@ const updateChart = async () => {
     const fact = params[0];
     let G = 1;
 
-    totals.calls += fact.calls++;
+    totals.calls += fact.calls++; 
     totals.abandoned += fact.abandoned++;
     totals.completed += fact.completed++;
 
