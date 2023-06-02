@@ -100,3 +100,4 @@ const updateChart = async () => {
 
 setInterval(updateChart, 1000);
 await updateChart();
+
